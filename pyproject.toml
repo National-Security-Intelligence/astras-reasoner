@@ -1,0 +1,26 @@
+[project]
+name = "astras-reasoner"
+version = "0.1.0"
+description = "Astras MLX eval/train scripts"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "mlx>=0.26.0",
+    "mlx-lm>=0.24.0",
+    "datasets>=3.0.0",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.11.0"]
+
+[tool.uv]
+package = false
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
