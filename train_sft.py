@@ -5,40 +5,17 @@ import subprocess
 import sys
 from pathlib import Path
 
-from model import STUDENT
 from prepare_curriculum import main as prepare
-
-ADAPTER = "outputs/sft"
 
 
 def main() -> None:
     if not Path("data/gsm8k/train.jsonl").exists():
         prepare()
-    cmd = [
-        sys.executable,
-        "-m",
-        "mlx_lm.lora",
-        "--model",
-        STUDENT,
-        "--data",
-        "data/gsm8k",
-        "--train",
-        "--batch-size",
-        "1",
-        "--iters",
-        "300",
-        "--learning-rate",
-        "2e-5",
-        "--lr-schedule",
-        "cosine",
-        "--adapter-path",
-        ADAPTER,
-        "--max-seq-length",
-        "2048",
-    ]
+    cmd = [sys.executable, "-m", "mlx_lm.lora", "--config", "lora_config.yaml"]
     print(" ".join(cmd))
+    print("LR: warmup 30 steps 2e-7->2e-5, cosine decay to 2e-7 over 300 iters")
     subprocess.check_call(cmd)
-    print("saved", ADAPTER)
+    print("saved outputs/sft")
 
 
 if __name__ == "__main__":

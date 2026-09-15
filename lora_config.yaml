@@ -1,0 +1,24 @@
+# mlx-lm LoRA. Schedule only works in this file, not CLI flags.
+model: mlx-community/Phi-4-mini-reasoning-4bit
+train: true
+fine_tune_type: lora
+data: data/gsm8k
+seed: 0
+batch_size: 1
+iters: 300
+val_batches: 10
+learning_rate: 2.0e-5
+adapter_path: outputs/sft
+max_seq_length: 2048
+num_layers: 16
+optimizer: adamw
+lora_parameters:
+  keys: ["self_attn.q_proj", "self_attn.v_proj"]
+  rank: 16
+  scale: 20.0
+  dropout: 0.0
+lr_schedule:
+  name: cosine_decay
+  warmup: 30
+  warmup_init: 2.0e-7
+  arguments: [2.0e-5, 300, 2.0e-7]
