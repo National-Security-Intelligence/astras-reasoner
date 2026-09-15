@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from model import STUDENT
-from prepare_openmath import main as prepare
+from prepare_curriculum import main as prepare
 
 ADAPTER = "outputs/sft"
 
@@ -15,15 +15,26 @@ def main() -> None:
     if not Path("data/gsm8k/train.jsonl").exists():
         prepare()
     cmd = [
-        sys.executable, "-m", "mlx_lm.lora",
-        "--model", STUDENT,
-        "--data", "data/gsm8k",
+        sys.executable,
+        "-m",
+        "mlx_lm.lora",
+        "--model",
+        STUDENT,
+        "--data",
+        "data/gsm8k",
         "--train",
-        "--batch-size", "1",
-        "--iters", "800",
-        "--learning-rate", "1e-5",
-        "--adapter-path", ADAPTER,
-        "--max-seq-length", "2048",
+        "--batch-size",
+        "1",
+        "--iters",
+        "300",
+        "--learning-rate",
+        "2e-5",
+        "--lr-schedule",
+        "cosine",
+        "--adapter-path",
+        ADAPTER,
+        "--max-seq-length",
+        "2048",
     ]
     print(" ".join(cmd))
     subprocess.check_call(cmd)
